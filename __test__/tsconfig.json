@@ -6,6 +6,6 @@
     "outDir": "lib",
     "rootDir": "."
   },
-  "include": ["*.ts"],
+  "include": ["*.ts", "../examples/manual.ts"],
   "exclude": ["lib"]
 }

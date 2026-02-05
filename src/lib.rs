@@ -496,7 +496,7 @@ impl HookJs {
   #[napi(getter)]
   pub fn is_running(&self) -> bool {
     let guard = self.hook.lock().unwrap();
-    guard.as_ref().map_or(false, |h| h.is_running())
+    guard.as_ref().is_some_and(|h| h.is_running())
   }
 }
 

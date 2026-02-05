@@ -250,6 +250,7 @@ jobs:
         with:
           node-version: 24
           cache: yarn
+          registry-url: https://registry.npmjs.org
       - name: Install dependencies
         run: yarn install
       - name: create npm dirs
@@ -276,3 +277,4 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true

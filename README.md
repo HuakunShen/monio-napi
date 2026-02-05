@@ -106,19 +106,19 @@ console.log('Keyboard layout:', settings.keyboardLayout)
 
 ## Event Types
 
-| Event Type | Description |
-|------------|-------------|
-| `HookEnabled` | Hook started successfully |
-| `HookDisabled` | Hook stopped |
-| `KeyPressed` | Key pressed down |
-| `KeyReleased` | Key released |
-| `KeyTyped` | Character typed |
-| `MousePressed` | Mouse button pressed |
-| `MouseReleased` | Mouse button released |
-| `MouseClicked` | Button press + release without movement |
-| `MouseMoved` | Mouse moved (no buttons held) |
-| `MouseDragged` | Mouse moved while button held |
-| `MouseWheel` | Scroll wheel rotated |
+| Event Type      | Description                             |
+| --------------- | --------------------------------------- |
+| `HookEnabled`   | Hook started successfully               |
+| `HookDisabled`  | Hook stopped                            |
+| `KeyPressed`    | Key pressed down                        |
+| `KeyReleased`   | Key released                            |
+| `KeyTyped`      | Character typed                         |
+| `MousePressed`  | Mouse button pressed                    |
+| `MouseReleased` | Mouse button released                   |
+| `MouseClicked`  | Button press + release without movement |
+| `MouseMoved`    | Mouse moved (no buttons held)           |
+| `MouseDragged`  | Mouse moved while button held           |
+| `MouseWheel`    | Scroll wheel rotated                    |
 
 ## Platform Notes
 
@@ -153,6 +153,13 @@ git push
 ```
 
 GitHub Actions will build native binaries for all platforms and publish to npm.
+
+## Publish
+
+```bash
+npm version patch
+git push --follow-tags
+```
 
 ## License
 

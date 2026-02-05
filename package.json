@@ -1,6 +1,6 @@
 {
   "name": "monio-napi",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Template project for writing node package with napi-rs",
   "main": "index.js",
   "repository": {
@@ -103,5 +103,11 @@
     "singleQuote": true,
     "arrowParens": "always"
   },
-  "packageManager": "yarn@4.12.0"
+  "packageManager": "yarn@4.12.0",
+  "optionalDependencies": {
+    "monio-napi-win32-x64-msvc": "0.0.1",
+    "monio-napi-darwin-x64": "0.0.1",
+    "monio-napi-linux-x64-gnu": "0.0.1",
+    "monio-napi-darwin-arm64": "0.0.1"
+  }
 }

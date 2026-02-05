@@ -1,0 +1,3 @@
+[submodule "vendors/monio"]
+	path = vendors/monio
+	url = https://github.com/HuakunShen/monio.git

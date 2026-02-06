@@ -562,6 +562,7 @@ module.exports.ButtonJs = nativeBinding.ButtonJs
 module.exports.EventTypeJs = nativeBinding.EventTypeJs
 module.exports.getDisplayAtPoint = nativeBinding.getDisplayAtPoint
 module.exports.getDisplays = nativeBinding.getDisplays
+module.exports.getMousePosition = nativeBinding.getMousePosition
 module.exports.getPrimaryDisplay = nativeBinding.getPrimaryDisplay
 module.exports.getSystemSettings = nativeBinding.getSystemSettings
 module.exports.KeyJs = nativeBinding.KeyJs

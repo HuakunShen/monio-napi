@@ -11,7 +11,7 @@ export declare const enum ButtonJs {
   Middle = 2,
   Button4 = 3,
   Button5 = 4,
-  Unknown = 5
+  Unknown = 5,
 }
 
 export interface DisplayInfoJs {
@@ -41,7 +41,7 @@ export declare const enum EventTypeJs {
   MouseClicked = 7,
   MouseMoved = 8,
   MouseDragged = 9,
-  MouseWheel = 10
+  MouseWheel = 10,
 }
 
 /** Get display at a specific point */
@@ -49,6 +49,9 @@ export declare function getDisplayAtPoint(x: number, y: number): DisplayInfoJs |
 
 /** Get all displays */
 export declare function getDisplays(): Array<DisplayInfoJs>
+
+/** Get the current mouse cursor position */
+export declare function getMousePosition(): MouseDataJs
 
 /** Get the primary display */
 export declare function getPrimaryDisplay(): DisplayInfoJs
@@ -129,7 +132,7 @@ export declare const enum KeyJs {
   ArrowRight = 64,
   ArrowUp = 65,
   ArrowDown = 66,
-  Unknown = 67
+  Unknown = 67,
 }
 
 export interface MouseDataJs {
@@ -149,7 +152,7 @@ export declare const enum ScrollDirectionJs {
   Up = 0,
   Down = 1,
   Left = 2,
-  Right = 3
+  Right = 3,
 }
 
 /** Press a key */

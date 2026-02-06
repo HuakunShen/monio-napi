@@ -9,8 +9,8 @@ use std::time::UNIX_EPOCH;
 // Re-export monio types
 use monio::{
   display_at_point, displays, key_press, key_release, key_tap, mouse_click, mouse_move,
-  mouse_press, mouse_release, primary_display, system_settings, Button, DisplayInfo, Event,
-  EventType, Hook, Key, Rect, ScrollDirection, SystemSettings,
+  mouse_position, mouse_press, mouse_release, primary_display, system_settings, Button,
+  DisplayInfo, Event, EventType, Hook, Key, Rect, ScrollDirection, SystemSettings,
 };
 
 // ============================================================================
@@ -661,4 +661,16 @@ pub fn simulate_key_release(key: KeyJs) -> Result<()> {
 pub fn simulate_key_tap(key: KeyJs) -> Result<()> {
   key_tap(key.into())
     .map_err(|e| Error::new(Status::GenericFailure, format!("Failed to tap key: {}", e)))
+}
+
+/// Get the current mouse cursor position
+#[napi]
+pub fn get_mouse_position() -> Result<MouseDataJs> {
+  let (x, y) = mouse_position().map_err(|e| {
+    Error::new(
+      Status::GenericFailure,
+      format!("Failed to get mouse position: {}", e),
+    )
+  })?;
+  Ok(MouseDataJs { x, y, button: None })
 }

@@ -558,13 +558,27 @@ if (!nativeBinding) {
 
 module.exports = nativeBinding
 module.exports.HookJs = nativeBinding.HookJs
+module.exports.InputHook = nativeBinding.InputHook
 module.exports.ButtonJs = nativeBinding.ButtonJs
+module.exports.computeEventMask = nativeBinding.computeEventMask
+module.exports.EVENT_MASK_ALL = nativeBinding.EVENT_MASK_ALL
+module.exports.EVENT_MASK_KEYBOARD = nativeBinding.EVENT_MASK_KEYBOARD
+module.exports.EVENT_MASK_MOUSE_ALL = nativeBinding.EVENT_MASK_MOUSE_ALL
+module.exports.EVENT_MASK_MOUSE_BUTTONS = nativeBinding.EVENT_MASK_MOUSE_BUTTONS
+module.exports.EVENT_MASK_MOUSE_MOVEMENT = nativeBinding.EVENT_MASK_MOUSE_MOVEMENT
+module.exports.EVENT_MASK_MOUSE_WHEEL = nativeBinding.EVENT_MASK_MOUSE_WHEEL
 module.exports.EventTypeJs = nativeBinding.EventTypeJs
+module.exports.getAllKeyDisplayInfo = nativeBinding.getAllKeyDisplayInfo
+module.exports.getButtonDisplayName = nativeBinding.getButtonDisplayName
 module.exports.getDisplayAtPoint = nativeBinding.getDisplayAtPoint
 module.exports.getDisplays = nativeBinding.getDisplays
+module.exports.getKeyCategory = nativeBinding.getKeyCategory
+module.exports.getKeyDisplayName = nativeBinding.getKeyDisplayName
 module.exports.getMousePosition = nativeBinding.getMousePosition
 module.exports.getPrimaryDisplay = nativeBinding.getPrimaryDisplay
 module.exports.getSystemSettings = nativeBinding.getSystemSettings
+module.exports.isInputPattern = nativeBinding.isInputPattern
+module.exports.isModifierKey = nativeBinding.isModifierKey
 module.exports.KeyJs = nativeBinding.KeyJs
 module.exports.ScrollDirectionJs = nativeBinding.ScrollDirectionJs
 module.exports.simulateKeyPress = nativeBinding.simulateKeyPress

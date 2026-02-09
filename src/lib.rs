@@ -635,7 +635,7 @@ fn key_display_name(key: KeyJs) -> &'static str {
     // Special keys
     KeyJs::Escape => "Esc",
     KeyJs::Space => "Space",
-    KeyJs::Enter => "\u{21b5}",    // ↵
+    KeyJs::Enter => "\u{21b5}",     // ↵
     KeyJs::Backspace => "\u{232b}", // ⌫
     KeyJs::Tab => "Tab",
     // Modifiers
@@ -780,16 +780,36 @@ fn key_category(key: KeyJs) -> &'static str {
   }
   // Additional categories not covered by monio's built-in methods
   match k {
-    Key::Grave | Key::Minus | Key::Equal | Key::BracketLeft | Key::BracketRight
-    | Key::Backslash | Key::Semicolon | Key::Quote | Key::Comma | Key::Period
+    Key::Grave
+    | Key::Minus
+    | Key::Equal
+    | Key::BracketLeft
+    | Key::BracketRight
+    | Key::Backslash
+    | Key::Semicolon
+    | Key::Quote
+    | Key::Comma
+    | Key::Period
     | Key::Slash => "punctuation",
     Key::CapsLock | Key::NumLock | Key::ScrollLock => "lock",
-    Key::BrowserBack | Key::BrowserForward | Key::BrowserRefresh | Key::BrowserStop
-    | Key::BrowserSearch | Key::BrowserFavorites | Key::BrowserHome => "browser",
+    Key::BrowserBack
+    | Key::BrowserForward
+    | Key::BrowserRefresh
+    | Key::BrowserStop
+    | Key::BrowserSearch
+    | Key::BrowserFavorites
+    | Key::BrowserHome => "browser",
     Key::LaunchMail | Key::LaunchApp1 | Key::LaunchApp2 => "application",
     Key::IntlBackslash | Key::IntlYen | Key::IntlRo => "international",
-    Key::Escape | Key::Space | Key::Enter | Key::Backspace | Key::Tab
-    | Key::Delete | Key::PrintScreen | Key::Pause | Key::ContextMenu => "special",
+    Key::Escape
+    | Key::Space
+    | Key::Enter
+    | Key::Backspace
+    | Key::Tab
+    | Key::Delete
+    | Key::PrintScreen
+    | Key::Pause
+    | Key::ContextMenu => "special",
     _ => "unknown",
   }
 }
@@ -834,62 +854,143 @@ const KEY_JS_COUNT: i32 = 138;
 /// Map an integer to a KeyJs variant. Returns None for out-of-range values.
 fn key_from_i32(v: i32) -> Option<KeyJs> {
   match v {
-    0 => Some(KeyJs::KeyA), 1 => Some(KeyJs::KeyB), 2 => Some(KeyJs::KeyC),
-    3 => Some(KeyJs::KeyD), 4 => Some(KeyJs::KeyE), 5 => Some(KeyJs::KeyF),
-    6 => Some(KeyJs::KeyG), 7 => Some(KeyJs::KeyH), 8 => Some(KeyJs::KeyI),
-    9 => Some(KeyJs::KeyJ), 10 => Some(KeyJs::KeyK), 11 => Some(KeyJs::KeyL),
-    12 => Some(KeyJs::KeyM), 13 => Some(KeyJs::KeyN), 14 => Some(KeyJs::KeyO),
-    15 => Some(KeyJs::KeyP), 16 => Some(KeyJs::KeyQ), 17 => Some(KeyJs::KeyR),
-    18 => Some(KeyJs::KeyS), 19 => Some(KeyJs::KeyT), 20 => Some(KeyJs::KeyU),
-    21 => Some(KeyJs::KeyV), 22 => Some(KeyJs::KeyW), 23 => Some(KeyJs::KeyX),
-    24 => Some(KeyJs::KeyY), 25 => Some(KeyJs::KeyZ),
-    26 => Some(KeyJs::Num0), 27 => Some(KeyJs::Num1), 28 => Some(KeyJs::Num2),
-    29 => Some(KeyJs::Num3), 30 => Some(KeyJs::Num4), 31 => Some(KeyJs::Num5),
-    32 => Some(KeyJs::Num6), 33 => Some(KeyJs::Num7), 34 => Some(KeyJs::Num8),
+    0 => Some(KeyJs::KeyA),
+    1 => Some(KeyJs::KeyB),
+    2 => Some(KeyJs::KeyC),
+    3 => Some(KeyJs::KeyD),
+    4 => Some(KeyJs::KeyE),
+    5 => Some(KeyJs::KeyF),
+    6 => Some(KeyJs::KeyG),
+    7 => Some(KeyJs::KeyH),
+    8 => Some(KeyJs::KeyI),
+    9 => Some(KeyJs::KeyJ),
+    10 => Some(KeyJs::KeyK),
+    11 => Some(KeyJs::KeyL),
+    12 => Some(KeyJs::KeyM),
+    13 => Some(KeyJs::KeyN),
+    14 => Some(KeyJs::KeyO),
+    15 => Some(KeyJs::KeyP),
+    16 => Some(KeyJs::KeyQ),
+    17 => Some(KeyJs::KeyR),
+    18 => Some(KeyJs::KeyS),
+    19 => Some(KeyJs::KeyT),
+    20 => Some(KeyJs::KeyU),
+    21 => Some(KeyJs::KeyV),
+    22 => Some(KeyJs::KeyW),
+    23 => Some(KeyJs::KeyX),
+    24 => Some(KeyJs::KeyY),
+    25 => Some(KeyJs::KeyZ),
+    26 => Some(KeyJs::Num0),
+    27 => Some(KeyJs::Num1),
+    28 => Some(KeyJs::Num2),
+    29 => Some(KeyJs::Num3),
+    30 => Some(KeyJs::Num4),
+    31 => Some(KeyJs::Num5),
+    32 => Some(KeyJs::Num6),
+    33 => Some(KeyJs::Num7),
+    34 => Some(KeyJs::Num8),
     35 => Some(KeyJs::Num9),
-    36 => Some(KeyJs::F1), 37 => Some(KeyJs::F2), 38 => Some(KeyJs::F3),
-    39 => Some(KeyJs::F4), 40 => Some(KeyJs::F5), 41 => Some(KeyJs::F6),
-    42 => Some(KeyJs::F7), 43 => Some(KeyJs::F8), 44 => Some(KeyJs::F9),
-    45 => Some(KeyJs::F10), 46 => Some(KeyJs::F11), 47 => Some(KeyJs::F12),
-    48 => Some(KeyJs::Escape), 49 => Some(KeyJs::Space), 50 => Some(KeyJs::Enter),
-    51 => Some(KeyJs::Backspace), 52 => Some(KeyJs::Tab),
-    53 => Some(KeyJs::ShiftLeft), 54 => Some(KeyJs::ShiftRight),
-    55 => Some(KeyJs::ControlLeft), 56 => Some(KeyJs::ControlRight),
-    57 => Some(KeyJs::AltLeft), 58 => Some(KeyJs::AltRight),
-    59 => Some(KeyJs::MetaLeft), 60 => Some(KeyJs::MetaRight),
-    61 => Some(KeyJs::CapsLock), 62 => Some(KeyJs::Delete),
-    63 => Some(KeyJs::ArrowLeft), 64 => Some(KeyJs::ArrowRight),
-    65 => Some(KeyJs::ArrowUp), 66 => Some(KeyJs::ArrowDown),
+    36 => Some(KeyJs::F1),
+    37 => Some(KeyJs::F2),
+    38 => Some(KeyJs::F3),
+    39 => Some(KeyJs::F4),
+    40 => Some(KeyJs::F5),
+    41 => Some(KeyJs::F6),
+    42 => Some(KeyJs::F7),
+    43 => Some(KeyJs::F8),
+    44 => Some(KeyJs::F9),
+    45 => Some(KeyJs::F10),
+    46 => Some(KeyJs::F11),
+    47 => Some(KeyJs::F12),
+    48 => Some(KeyJs::Escape),
+    49 => Some(KeyJs::Space),
+    50 => Some(KeyJs::Enter),
+    51 => Some(KeyJs::Backspace),
+    52 => Some(KeyJs::Tab),
+    53 => Some(KeyJs::ShiftLeft),
+    54 => Some(KeyJs::ShiftRight),
+    55 => Some(KeyJs::ControlLeft),
+    56 => Some(KeyJs::ControlRight),
+    57 => Some(KeyJs::AltLeft),
+    58 => Some(KeyJs::AltRight),
+    59 => Some(KeyJs::MetaLeft),
+    60 => Some(KeyJs::MetaRight),
+    61 => Some(KeyJs::CapsLock),
+    62 => Some(KeyJs::Delete),
+    63 => Some(KeyJs::ArrowLeft),
+    64 => Some(KeyJs::ArrowRight),
+    65 => Some(KeyJs::ArrowUp),
+    66 => Some(KeyJs::ArrowDown),
     67 => Some(KeyJs::Unknown),
-    68 => Some(KeyJs::Insert), 69 => Some(KeyJs::Home), 70 => Some(KeyJs::End),
-    71 => Some(KeyJs::PageUp), 72 => Some(KeyJs::PageDown),
-    73 => Some(KeyJs::NumLock), 74 => Some(KeyJs::ScrollLock),
-    75 => Some(KeyJs::PrintScreen), 76 => Some(KeyJs::Pause),
-    77 => Some(KeyJs::Grave), 78 => Some(KeyJs::Minus), 79 => Some(KeyJs::Equal),
-    80 => Some(KeyJs::BracketLeft), 81 => Some(KeyJs::BracketRight),
-    82 => Some(KeyJs::Backslash), 83 => Some(KeyJs::Semicolon), 84 => Some(KeyJs::Quote),
-    85 => Some(KeyJs::Comma), 86 => Some(KeyJs::Period), 87 => Some(KeyJs::Slash),
-    88 => Some(KeyJs::F13), 89 => Some(KeyJs::F14), 90 => Some(KeyJs::F15),
-    91 => Some(KeyJs::F16), 92 => Some(KeyJs::F17), 93 => Some(KeyJs::F18),
-    94 => Some(KeyJs::F19), 95 => Some(KeyJs::F20), 96 => Some(KeyJs::F21),
-    97 => Some(KeyJs::F22), 98 => Some(KeyJs::F23), 99 => Some(KeyJs::F24),
-    100 => Some(KeyJs::Numpad0), 101 => Some(KeyJs::Numpad1), 102 => Some(KeyJs::Numpad2),
-    103 => Some(KeyJs::Numpad3), 104 => Some(KeyJs::Numpad4), 105 => Some(KeyJs::Numpad5),
-    106 => Some(KeyJs::Numpad6), 107 => Some(KeyJs::Numpad7), 108 => Some(KeyJs::Numpad8),
+    68 => Some(KeyJs::Insert),
+    69 => Some(KeyJs::Home),
+    70 => Some(KeyJs::End),
+    71 => Some(KeyJs::PageUp),
+    72 => Some(KeyJs::PageDown),
+    73 => Some(KeyJs::NumLock),
+    74 => Some(KeyJs::ScrollLock),
+    75 => Some(KeyJs::PrintScreen),
+    76 => Some(KeyJs::Pause),
+    77 => Some(KeyJs::Grave),
+    78 => Some(KeyJs::Minus),
+    79 => Some(KeyJs::Equal),
+    80 => Some(KeyJs::BracketLeft),
+    81 => Some(KeyJs::BracketRight),
+    82 => Some(KeyJs::Backslash),
+    83 => Some(KeyJs::Semicolon),
+    84 => Some(KeyJs::Quote),
+    85 => Some(KeyJs::Comma),
+    86 => Some(KeyJs::Period),
+    87 => Some(KeyJs::Slash),
+    88 => Some(KeyJs::F13),
+    89 => Some(KeyJs::F14),
+    90 => Some(KeyJs::F15),
+    91 => Some(KeyJs::F16),
+    92 => Some(KeyJs::F17),
+    93 => Some(KeyJs::F18),
+    94 => Some(KeyJs::F19),
+    95 => Some(KeyJs::F20),
+    96 => Some(KeyJs::F21),
+    97 => Some(KeyJs::F22),
+    98 => Some(KeyJs::F23),
+    99 => Some(KeyJs::F24),
+    100 => Some(KeyJs::Numpad0),
+    101 => Some(KeyJs::Numpad1),
+    102 => Some(KeyJs::Numpad2),
+    103 => Some(KeyJs::Numpad3),
+    104 => Some(KeyJs::Numpad4),
+    105 => Some(KeyJs::Numpad5),
+    106 => Some(KeyJs::Numpad6),
+    107 => Some(KeyJs::Numpad7),
+    108 => Some(KeyJs::Numpad8),
     109 => Some(KeyJs::Numpad9),
-    110 => Some(KeyJs::NumpadAdd), 111 => Some(KeyJs::NumpadSubtract),
-    112 => Some(KeyJs::NumpadMultiply), 113 => Some(KeyJs::NumpadDivide),
-    114 => Some(KeyJs::NumpadDecimal), 115 => Some(KeyJs::NumpadEnter),
+    110 => Some(KeyJs::NumpadAdd),
+    111 => Some(KeyJs::NumpadSubtract),
+    112 => Some(KeyJs::NumpadMultiply),
+    113 => Some(KeyJs::NumpadDivide),
+    114 => Some(KeyJs::NumpadDecimal),
+    115 => Some(KeyJs::NumpadEnter),
     116 => Some(KeyJs::NumpadEqual),
-    117 => Some(KeyJs::VolumeUp), 118 => Some(KeyJs::VolumeDown), 119 => Some(KeyJs::VolumeMute),
-    120 => Some(KeyJs::MediaPlayPause), 121 => Some(KeyJs::MediaStop),
-    122 => Some(KeyJs::MediaNext), 123 => Some(KeyJs::MediaPrevious),
-    124 => Some(KeyJs::BrowserBack), 125 => Some(KeyJs::BrowserForward),
-    126 => Some(KeyJs::BrowserRefresh), 127 => Some(KeyJs::BrowserStop),
-    128 => Some(KeyJs::BrowserSearch), 129 => Some(KeyJs::BrowserFavorites),
+    117 => Some(KeyJs::VolumeUp),
+    118 => Some(KeyJs::VolumeDown),
+    119 => Some(KeyJs::VolumeMute),
+    120 => Some(KeyJs::MediaPlayPause),
+    121 => Some(KeyJs::MediaStop),
+    122 => Some(KeyJs::MediaNext),
+    123 => Some(KeyJs::MediaPrevious),
+    124 => Some(KeyJs::BrowserBack),
+    125 => Some(KeyJs::BrowserForward),
+    126 => Some(KeyJs::BrowserRefresh),
+    127 => Some(KeyJs::BrowserStop),
+    128 => Some(KeyJs::BrowserSearch),
+    129 => Some(KeyJs::BrowserFavorites),
     130 => Some(KeyJs::BrowserHome),
-    131 => Some(KeyJs::LaunchMail), 132 => Some(KeyJs::LaunchApp1), 133 => Some(KeyJs::LaunchApp2),
-    134 => Some(KeyJs::IntlBackslash), 135 => Some(KeyJs::IntlYen), 136 => Some(KeyJs::IntlRo),
+    131 => Some(KeyJs::LaunchMail),
+    132 => Some(KeyJs::LaunchApp1),
+    133 => Some(KeyJs::LaunchApp2),
+    134 => Some(KeyJs::IntlBackslash),
+    135 => Some(KeyJs::IntlYen),
+    136 => Some(KeyJs::IntlRo),
     137 => Some(KeyJs::ContextMenu),
     _ => None,
   }
@@ -1154,7 +1255,8 @@ pub const EVENT_MASK_MOUSE_MOVEMENT: u32 = (1 << 8) | (1 << 9);
 pub const EVENT_MASK_MOUSE_WHEEL: u32 = 1 << 10;
 
 #[napi]
-pub const EVENT_MASK_MOUSE_ALL: u32 = (1 << 5) | (1 << 6) | (1 << 7) | (1 << 8) | (1 << 9) | (1 << 10);
+pub const EVENT_MASK_MOUSE_ALL: u32 =
+  (1 << 5) | (1 << 6) | (1 << 7) | (1 << 8) | (1 << 9) | (1 << 10);
 
 /// Check whether a subscription pattern is input-related (keyboard or mouse).
 #[napi]
@@ -1189,7 +1291,11 @@ pub fn compute_event_mask(patterns: Vec<String>) -> u32 {
       mask |= EVENT_MASK_MOUSE_ALL;
     }
   }
-  if mask == 0 { EVENT_MASK_ALL } else { mask }
+  if mask == 0 {
+    EVENT_MASK_ALL
+  } else {
+    mask
+  }
 }
 
 /// Start listening for input events with a callback.
@@ -1279,14 +1385,11 @@ pub struct WheelEventJs {
 // Type aliases for the per-event threadsafe functions.
 // Each TSFN carries its own typed payload, avoiding the generic EventJs.
 // build_callback() produces: ThreadsafeFunction<T, (), Vec<T>, Status, false>
-type KeyboardTsFn =
-  ThreadsafeFunction<KeyboardEventJs, (), Vec<KeyboardEventJs>, Status, false>;
+type KeyboardTsFn = ThreadsafeFunction<KeyboardEventJs, (), Vec<KeyboardEventJs>, Status, false>;
 type MouseButtonTsFn =
   ThreadsafeFunction<MouseButtonEventJs, (), Vec<MouseButtonEventJs>, Status, false>;
-type MouseMoveTsFn =
-  ThreadsafeFunction<MouseMoveEventJs, (), Vec<MouseMoveEventJs>, Status, false>;
-type WheelTsFn =
-  ThreadsafeFunction<WheelEventJs, (), Vec<WheelEventJs>, Status, false>;
+type MouseMoveTsFn = ThreadsafeFunction<MouseMoveEventJs, (), Vec<MouseMoveEventJs>, Status, false>;
+type WheelTsFn = ThreadsafeFunction<WheelEventJs, (), Vec<WheelEventJs>, Status, false>;
 
 /// Internal storage for per-event-type callbacks.
 struct InputHookCallbacks {

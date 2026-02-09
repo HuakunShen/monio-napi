@@ -1471,6 +1471,12 @@ pub struct InputHook {
   mask: Arc<AtomicU32>,
 }
 
+impl Default for InputHook {
+  fn default() -> Self {
+    Self::new()
+  }
+}
+
 #[napi]
 impl InputHook {
   #[napi(constructor)]

@@ -16,7 +16,7 @@ Cross-platform input monitoring for Node.js, powered by [monio](https://github.c
 ```bash
 npm install monio-napi
 # or
-yarn add monio-napi
+pnpm add monio-napi
 ```
 
 ## Usage
@@ -137,10 +137,10 @@ Uses X11 (XRecord for capture, XTest for simulation). Requires `libx11` and `lib
 ## Development
 
 ```bash
-yarn install
-yarn build       # release build
-yarn build:debug # debug build
-yarn test
+pnpm install
+pnpm build       # release build
+pnpm build:debug # debug build
+pnpm test
 ```
 
 ## Release

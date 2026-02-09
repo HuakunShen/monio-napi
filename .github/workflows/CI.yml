@@ -230,7 +230,9 @@ jobs:
         with:
           image: ${{ steps.docker.outputs.IMAGE }}
           options: '-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}'
-          run: pnpm test
+          run: |
+            corepack enable
+            pnpm test
   publish:
     name: Publish
     runs-on: ubuntu-latest

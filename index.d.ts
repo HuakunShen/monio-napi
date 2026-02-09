@@ -3,6 +3,54 @@
 export declare class HookJs {
   stop(): void
   get isRunning(): boolean
+  /**
+   * Update the event filter bitmask at runtime without restarting the hook.
+   * Each bit corresponds to an EventTypeJs value (bit 0 = HookEnabled, bit 2 = KeyPressed, etc.).
+   * Set to 0x7FF (2047) for all events, or combine specific bits.
+   */
+  setEventMask(mask: number): void
+  /** Get the current event filter bitmask. */
+  get eventMask(): number
+}
+
+/**
+ * EventEmitter-style input hook with per-event-type callbacks.
+ *
+ * Unlike `startListen()` which sends all events through a single callback,
+ * `InputHook` dispatches events to typed callbacks registered via `onKeyDown()`,
+ * `onMouseMove()`, etc. Only registered event types cross the NAPI boundary —
+ * the event mask is computed automatically from which callbacks are set.
+ *
+ * ```js
+ * const hook = new InputHook();
+ * hook.onKeyDown((data) => console.log("key:", data.key, data.rawCode));
+ * hook.onMouseMove((data) => console.log("mouse:", data.x, data.y));
+ * hook.start();
+ * // ... later:
+ * hook.stop();
+ * ```
+ */
+export declare class InputHook {
+  constructor()
+  onKeyDown(callback: (data: KeyboardEventJs) => void): void
+  onKeyUp(callback: (data: KeyboardEventJs) => void): void
+  onMouseDown(callback: (data: MouseButtonEventJs) => void): void
+  onMouseUp(callback: (data: MouseButtonEventJs) => void): void
+  onClick(callback: (data: MouseButtonEventJs) => void): void
+  onMouseMove(callback: (data: MouseMoveEventJs) => void): void
+  onWheel(callback: (data: WheelEventJs) => void): void
+  offKeyDown(): void
+  offKeyUp(): void
+  offMouseDown(): void
+  offMouseUp(): void
+  offClick(): void
+  offMouseMove(): void
+  offWheel(): void
+  removeAllListeners(): void
+  start(): void
+  stop(): void
+  get isRunning(): boolean
+  get eventMask(): number
 }
 
 export declare const enum ButtonJs {
@@ -14,6 +62,20 @@ export declare const enum ButtonJs {
   Unknown = 5,
 }
 
+/**
+ * Compute an event mask from a list of subscription pattern strings.
+ *
+ * Recognized patterns:
+ * - `"keyboard:*"` or any `"keyboard:..."` → keyboard events
+ * - `"mouse:down"`, `"mouse:up"`, `"mouse:click"` → mouse button events
+ * - `"mouse:move"` → mouse movement events
+ * - `"mouse:scroll"` → mouse wheel events
+ * - `"mouse:*"` or other `"mouse:..."` → all mouse events
+ *
+ * Returns `EVENT_MASK_ALL` if no patterns match (safe default).
+ */
+export declare function computeEventMask(patterns: Array<string>): number
+
 export interface DisplayInfoJs {
   id: number
   bounds: RectJs
@@ -21,6 +83,29 @@ export interface DisplayInfoJs {
   refreshRate?: number
   isPrimary: boolean
 }
+
+/**
+ * Predefined event masks for common subscription patterns.
+ * Use these with `startListen`'s `eventMask` parameter or `HookJs.setEventMask()`.
+ *
+ * - `EVENT_MASK_ALL` (0x7FF): All events
+ * - `EVENT_MASK_KEYBOARD` (0x1C): KeyPressed | KeyReleased | KeyTyped
+ * - `EVENT_MASK_MOUSE_BUTTONS` (0xE0): MousePressed | MouseReleased | MouseClicked
+ * - `EVENT_MASK_MOUSE_MOVEMENT` (0x300): MouseMoved | MouseDragged
+ * - `EVENT_MASK_MOUSE_WHEEL` (0x400): MouseWheel
+ * - `EVENT_MASK_MOUSE_ALL` (0x7E0): All mouse events
+ */
+export const EVENT_MASK_ALL: number
+
+export const EVENT_MASK_KEYBOARD: number
+
+export const EVENT_MASK_MOUSE_ALL: number
+
+export const EVENT_MASK_MOUSE_BUTTONS: number
+
+export const EVENT_MASK_MOUSE_MOVEMENT: number
+
+export const EVENT_MASK_MOUSE_WHEEL: number
 
 export interface EventJs {
   eventType: EventTypeJs
@@ -44,11 +129,23 @@ export declare const enum EventTypeJs {
   MouseWheel = 10,
 }
 
+/** Get display info for all known keys. */
+export declare function getAllKeyDisplayInfo(): Array<KeyDisplayInfo>
+
+/** Get the display name for a mouse button. */
+export declare function getButtonDisplayName(button: ButtonJs): string
+
 /** Get display at a specific point */
 export declare function getDisplayAtPoint(x: number, y: number): DisplayInfoJs | null
 
 /** Get all displays */
 export declare function getDisplays(): Array<DisplayInfoJs>
+
+/** Get the category for a key (e.g. "letter", "modifier", "arrow", "function"). */
+export declare function getKeyCategory(key: KeyJs): string
+
+/** Get the display name for a key. */
+export declare function getKeyDisplayName(key: KeyJs): string
 
 /** Get the current mouse cursor position */
 export declare function getMousePosition(): MouseDataJs
@@ -59,9 +156,28 @@ export declare function getPrimaryDisplay(): DisplayInfoJs
 /** Get system settings */
 export declare function getSystemSettings(): SystemSettingsJs
 
+/** Check whether a subscription pattern is input-related (keyboard or mouse). */
+export declare function isInputPattern(pattern: string): boolean
+
+/** Check if a key is a modifier key. */
+export declare function isModifierKey(key: KeyJs): boolean
+
 export interface KeyboardDataJs {
   key: KeyJs
   rawCode: number
+}
+
+/** Keyboard event payload for onKeyDown / onKeyUp callbacks. */
+export interface KeyboardEventJs {
+  key: KeyJs
+  rawCode: number
+  time: number
+}
+
+export interface KeyDisplayInfo {
+  key: number
+  displayName: string
+  category: string
 }
 
 export declare const enum KeyJs {
@@ -133,12 +249,97 @@ export declare const enum KeyJs {
   ArrowUp = 65,
   ArrowDown = 66,
   Unknown = 67,
+  Insert = 68,
+  Home = 69,
+  End = 70,
+  PageUp = 71,
+  PageDown = 72,
+  NumLock = 73,
+  ScrollLock = 74,
+  PrintScreen = 75,
+  Pause = 76,
+  Grave = 77,
+  Minus = 78,
+  Equal = 79,
+  BracketLeft = 80,
+  BracketRight = 81,
+  Backslash = 82,
+  Semicolon = 83,
+  Quote = 84,
+  Comma = 85,
+  Period = 86,
+  Slash = 87,
+  F13 = 88,
+  F14 = 89,
+  F15 = 90,
+  F16 = 91,
+  F17 = 92,
+  F18 = 93,
+  F19 = 94,
+  F20 = 95,
+  F21 = 96,
+  F22 = 97,
+  F23 = 98,
+  F24 = 99,
+  Numpad0 = 100,
+  Numpad1 = 101,
+  Numpad2 = 102,
+  Numpad3 = 103,
+  Numpad4 = 104,
+  Numpad5 = 105,
+  Numpad6 = 106,
+  Numpad7 = 107,
+  Numpad8 = 108,
+  Numpad9 = 109,
+  NumpadAdd = 110,
+  NumpadSubtract = 111,
+  NumpadMultiply = 112,
+  NumpadDivide = 113,
+  NumpadDecimal = 114,
+  NumpadEnter = 115,
+  NumpadEqual = 116,
+  VolumeUp = 117,
+  VolumeDown = 118,
+  VolumeMute = 119,
+  MediaPlayPause = 120,
+  MediaStop = 121,
+  MediaNext = 122,
+  MediaPrevious = 123,
+  BrowserBack = 124,
+  BrowserForward = 125,
+  BrowserRefresh = 126,
+  BrowserStop = 127,
+  BrowserSearch = 128,
+  BrowserFavorites = 129,
+  BrowserHome = 130,
+  LaunchMail = 131,
+  LaunchApp1 = 132,
+  LaunchApp2 = 133,
+  IntlBackslash = 134,
+  IntlYen = 135,
+  IntlRo = 136,
+  ContextMenu = 137,
+}
+
+/** Mouse button event payload for onMouseDown / onMouseUp / onClick callbacks. */
+export interface MouseButtonEventJs {
+  x: number
+  y: number
+  button: ButtonJs
+  time: number
 }
 
 export interface MouseDataJs {
   x: number
   y: number
   button?: ButtonJs
+}
+
+/** Mouse move event payload for onMouseMove callbacks. */
+export interface MouseMoveEventJs {
+  x: number
+  y: number
+  time: number
 }
 
 export interface RectJs {
@@ -179,8 +380,15 @@ export declare function simulateMouseRelease(button: ButtonJs): void
 /**
  * Start listening for input events with a callback.
  * Returns a HookJs instance that can be used to stop the listener.
+ *
+ * `event_mask` is an optional bitmask that filters events on the native side before
+ * crossing the NAPI boundary. This is a performance optimization — high-frequency
+ * events like MouseMoved never reach JS if the corresponding bit is not set.
+ *
+ * Use the `EVENT_MASK_*` constants to compose masks. If `None`, all events are forwarded.
+ * The mask can be updated at runtime via `HookJs.setEventMask()`.
  */
-export declare function startListen(callback: (event: EventJs) => void): HookJs
+export declare function startListen(callback: (event: EventJs) => void, eventMask?: number | undefined | null): HookJs
 
 export interface SystemSettingsJs {
   keyboardRepeatRate?: number
@@ -197,4 +405,13 @@ export interface WheelDataJs {
   y: number
   direction: ScrollDirectionJs
   delta: number
+}
+
+/** Wheel event payload for onWheel callbacks. */
+export interface WheelEventJs {
+  x: number
+  y: number
+  direction: ScrollDirectionJs
+  delta: number
+  time: number
 }

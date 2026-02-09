@@ -1,6 +1,6 @@
 {
   "name": "monio-napi",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Cross-platform input monitoring for Node.js",
   "main": "index.js",
   "repository": "https://github.com/HuakunShen/monio-napi",

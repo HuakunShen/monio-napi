@@ -38,8 +38,8 @@
   "scripts": {
     "artifacts": "napi artifacts",
     "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
-    "build": "napi build --platform --release",
-    "build:debug": "napi build --platform",
+    "build": "napi build --platform --release --no-const-enum",
+    "build:debug": "napi build --platform --no-const-enum",
     "format": "run-p format:prettier format:rs format:toml",
     "format:prettier": "prettier . -w",
     "format:toml": "taplo format",
@@ -47,7 +47,7 @@
     "lint": "oxlint .",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "ava",
-    "preversion": "napi build --platform && git add .",
+    "preversion": "napi build --platform --no-const-enum && git add .",
     "version": "napi version",
     "prepare": "husky"
   },

@@ -53,7 +53,7 @@ export declare class InputHook {
   get eventMask(): number
 }
 
-export declare const enum ButtonJs {
+export declare enum ButtonJs {
   Left = 0,
   Right = 1,
   Middle = 2,
@@ -115,7 +115,7 @@ export interface EventJs {
   wheel?: WheelDataJs
 }
 
-export declare const enum EventTypeJs {
+export declare enum EventTypeJs {
   HookEnabled = 0,
   HookDisabled = 1,
   KeyPressed = 2,
@@ -180,7 +180,7 @@ export interface KeyDisplayInfo {
   category: string
 }
 
-export declare const enum KeyJs {
+export declare enum KeyJs {
   KeyA = 0,
   KeyB = 1,
   KeyC = 2,
@@ -349,7 +349,7 @@ export interface RectJs {
   height: number
 }
 
-export declare const enum ScrollDirectionJs {
+export declare enum ScrollDirectionJs {
   Up = 0,
   Down = 1,
   Left = 2,

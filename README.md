@@ -19,6 +19,14 @@ npm install monio-napi
 pnpm add monio-napi
 ```
 
+### AI agent skill
+
+Install the monio-napi skill for agent guidance with:
+
+```bash
+npx skills add https://github.com/HuakunShen/monio-napi/skills --skill monio-napi
+```
+
 ## Usage
 
 ### Listening for Events

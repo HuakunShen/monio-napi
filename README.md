@@ -1,5 +1,8 @@
 # monio-napi
 
+[![npm](https://img.shields.io/npm/v/monio-napi.svg)](https://www.npmjs.com/package/monio-napi)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/HuakunShen/monio-napi)
+
 Cross-platform input monitoring for Node.js, powered by [monio](https://github.com/HuakunShen/monio) and [napi-rs](https://napi.rs).
 
 ## Features

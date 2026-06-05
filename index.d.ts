@@ -342,12 +342,18 @@ export interface MouseMoveEventJs {
   time: number
 }
 
+/** Check whether this process has macOS Input Monitoring access. */
+export declare function preflightListenEventAccess(): boolean
+
 export interface RectJs {
   x: number
   y: number
   width: number
   height: number
 }
+
+/** Request macOS Input Monitoring access for this process when supported. */
+export declare function requestListenEventAccess(): boolean
 
 export declare enum ScrollDirectionJs {
   Up = 0,

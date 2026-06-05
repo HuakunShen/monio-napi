@@ -9,6 +9,24 @@ use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::UNIX_EPOCH;
 
+#[cfg(target_os = "macos")]
+#[allow(non_snake_case)]
+mod macos_input_access {
+  #[link(name = "CoreGraphics", kind = "framework")]
+  unsafe extern "C" {
+    fn CGPreflightListenEventAccess() -> bool;
+    fn CGRequestListenEventAccess() -> bool;
+  }
+
+  pub fn preflight() -> bool {
+    unsafe { CGPreflightListenEventAccess() }
+  }
+
+  pub fn request() -> bool {
+    unsafe { CGRequestListenEventAccess() }
+  }
+}
+
 // Re-export monio types
 use monio::{
   display_at_point, displays, key_press, key_release, key_tap, mouse_click, mouse_move,
@@ -1295,6 +1313,34 @@ pub fn compute_event_mask(patterns: Vec<String>) -> u32 {
     EVENT_MASK_ALL
   } else {
     mask
+  }
+}
+
+/// Check whether this process has macOS Input Monitoring access.
+#[napi]
+pub fn preflight_listen_event_access() -> bool {
+  #[cfg(target_os = "macos")]
+  {
+    macos_input_access::preflight()
+  }
+
+  #[cfg(not(target_os = "macos"))]
+  {
+    true
+  }
+}
+
+/// Request macOS Input Monitoring access for this process when supported.
+#[napi]
+pub fn request_listen_event_access() -> bool {
+  #[cfg(target_os = "macos")]
+  {
+    macos_input_access::request()
+  }
+
+  #[cfg(not(target_os = "macos"))]
+  {
+    true
   }
 }
 

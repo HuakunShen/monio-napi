@@ -59,7 +59,7 @@ export declare enum ButtonJs {
   Middle = 2,
   Button4 = 3,
   Button5 = 4,
-  Unknown = 5,
+  Unknown = 5
 }
 
 /**
@@ -126,7 +126,7 @@ export declare enum EventTypeJs {
   MouseClicked = 7,
   MouseMoved = 8,
   MouseDragged = 9,
-  MouseWheel = 10,
+  MouseWheel = 10
 }
 
 /** Get display info for all known keys. */
@@ -318,7 +318,7 @@ export declare enum KeyJs {
   IntlBackslash = 134,
   IntlYen = 135,
   IntlRo = 136,
-  ContextMenu = 137,
+  ContextMenu = 137
 }
 
 /** Mouse button event payload for onMouseDown / onMouseUp / onClick callbacks. */
@@ -359,7 +359,7 @@ export declare enum ScrollDirectionJs {
   Up = 0,
   Down = 1,
   Left = 2,
-  Right = 3,
+  Right = 3
 }
 
 /** Press a key */

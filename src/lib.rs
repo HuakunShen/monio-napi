@@ -1358,9 +1358,32 @@ pub fn start_listen(
   #[napi(ts_arg_type = "(event: EventJs) => void")] callback: Function<(), ()>,
   event_mask: Option<u32>,
 ) -> Result<HookJs> {
-  let tsfn = callback
-    .build_threadsafe_function()
-    .build_callback(|ctx: ThreadsafeCallContext<EventJs>| Ok(vec![ctx.value]))?;
+  #[cfg(all(
+    target_os = "linux",
+    feature = "linux-evdev",
+    not(feature = "linux-x11")
+  ))]
+  let (ready_sender, ready_receiver) = std::sync::mpsc::sync_channel(1);
+
+  let tsfn = callback.build_threadsafe_function().build_callback(
+    |ctx: ThreadsafeCallContext<EventJs>| {
+      #[cfg(all(
+        target_os = "linux",
+        feature = "linux-evdev",
+        not(feature = "linux-x11")
+      ))]
+      let value = ctx.value;
+
+      #[cfg(not(all(
+        target_os = "linux",
+        feature = "linux-evdev",
+        not(feature = "linux-x11")
+      )))]
+      let value = vec![ctx.value];
+
+      Ok(value)
+    },
+  )?;
 
   let mask = Arc::new(AtomicU32::new(event_mask.unwrap_or(EVENT_MASK_ALL)));
   let mask_clone = mask.clone();
@@ -1368,6 +1391,15 @@ pub fn start_listen(
   let hook = Hook::new();
   hook
     .run_async(move |event: &Event| {
+      #[cfg(all(
+        target_os = "linux",
+        feature = "linux-evdev",
+        not(feature = "linux-x11")
+      ))]
+      if event.event_type == EventType::HookEnabled {
+        let _ = ready_sender.try_send(());
+      }
+
       // Filter on the Rust side — skip NAPI boundary for unwanted events
       let bit = event_type_bit(&event.event_type);
       if mask_clone.load(Ordering::Relaxed) & bit == 0 {
@@ -1382,6 +1414,20 @@ pub fn start_listen(
         format!("Failed to start listener: {}", e),
       )
     })?;
+
+  // The evdev hook emits HookEnabled after it opens the input devices.
+  // If initialization fails, the worker drops its sender without signaling readiness.
+  #[cfg(all(
+    target_os = "linux",
+    feature = "linux-evdev",
+    not(feature = "linux-x11")
+  ))]
+  ready_receiver.recv().map_err(|_| {
+    Error::new(
+      Status::GenericFailure,
+      "Failed to initialize evdev. Check access to /dev/uinput and /dev/input/event*.",
+    )
+  })?;
 
   Ok(HookJs {
     hook: Arc::new(Mutex::new(Some(hook))),
@@ -1902,6 +1948,32 @@ pub fn get_system_settings() -> Result<SystemSettingsJs> {
 #[napi]
 pub fn simulate_mouse_move(x: f64, y: f64) -> Result<()> {
   mouse_move(x, y).map_err(|e| {
+    Error::new(
+      Status::GenericFailure,
+      format!("Failed to move mouse: {}", e),
+    )
+  })
+}
+
+/// Move the pointer by signed relative input counts.
+#[cfg(all(
+  target_os = "linux",
+  feature = "linux-evdev",
+  not(feature = "linux-x11")
+))]
+#[napi]
+pub fn simulate_mouse_move_relative(delta_x: f64, delta_y: f64) -> Result<()> {
+  let valid_delta = |delta: f64| {
+    (f64::from(i32::MIN)..=f64::from(i32::MAX)).contains(&delta) && delta.fract() == 0.0
+  };
+  if !valid_delta(delta_x) || !valid_delta(delta_y) {
+    return Err(Error::new(
+      Status::InvalidArg,
+      "Mouse deltas must be signed 32-bit integers",
+    ));
+  }
+
+  monio::mouse_move_relative(delta_x, delta_y).map_err(|e| {
     Error::new(
       Status::GenericFailure,
       format!("Failed to move mouse: {}", e),

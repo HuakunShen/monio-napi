@@ -8,10 +8,15 @@ version = "0.1.0"
 [lib]
 crate-type = ["cdylib"]
 
+[features]
+default = ["linux-x11"]
+linux-x11 = ["monio/x11"]
+linux-evdev = ["monio/evdev"]
+
 [dependencies]
 napi = "3.0.0"
 napi-derive = "3.0.0"
-monio = { path = "vendors/monio", features = ["tokio", "recorder", "statistics"] }
+monio = { path = "vendors/monio", default-features = false, features = ["tokio", "recorder", "statistics"] }
 tokio = { version = "1", features = ["rt", "sync"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

@@ -17,6 +17,8 @@
   "files": [
     "index.d.ts",
     "index.js",
+    "evdev.d.ts",
+    "evdev.js",
     "browser.js"
   ],
   "napi": {
@@ -40,6 +42,7 @@
     "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
     "build": "napi build --platform --release --no-const-enum",
     "build:debug": "napi build --platform --no-const-enum",
+    "build:evdev": "cargo build --release --target x86_64-unknown-linux-gnu --no-default-features --features linux-evdev && cp \"${CARGO_TARGET_DIR:-target}/x86_64-unknown-linux-gnu/release/libmonio_napi.so\" monio-napi.evdev.linux-x64-gnu.node",
     "format": "run-p format:prettier format:rs format:toml",
     "format:prettier": "prettier . -w",
     "format:toml": "taplo format",

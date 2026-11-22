@@ -122,6 +122,16 @@ jobs:
             ${{ env.APP_NAME }}.*.node
             ${{ env.APP_NAME }}.*.wasm
           if-no-files-found: error
+      - name: Build evdev addon
+        if: ${{ matrix.settings.target == 'x86_64-unknown-linux-gnu' }}
+        run: pnpm build:evdev
+      - name: Upload evdev artifact
+        if: ${{ matrix.settings.target == 'x86_64-unknown-linux-gnu' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: evdev-linux-x64-gnu
+          path: monio-napi.evdev.linux-x64-gnu.node
+          if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
     needs:
@@ -259,12 +269,21 @@ jobs:
         run: pnpm install
       - name: create npm dirs
         run: pnpm napi create-npm-dirs
-      - name: Download all artifacts
+      - name: Download default bindings
         uses: actions/download-artifact@v7
         with:
           path: artifacts
+          pattern: bindings-*
       - name: Move artifacts
         run: pnpm artifacts
+      - name: Add evdev to the Linux x64 package
+        uses: actions/download-artifact@v7
+        with:
+          name: evdev-linux-x64-gnu
+          path: npm/linux-x64-gnu
+      - name: Include evdev in the Linux x64 package manifest
+        working-directory: npm/linux-x64-gnu
+        run: npm pkg set 'files[1]=monio-napi.evdev.linux-x64-gnu.node'
       - name: List packages
         run: ls -R ./npm
         shell: bash

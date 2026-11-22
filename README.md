@@ -143,7 +143,40 @@ No special permissions required for hooking. Simulation may require Administrato
 
 ### Linux
 
-Uses X11 (XRecord for capture, XTest for simulation). Requires `libx11` and `libxtst` at runtime.
+The default entry point uses X11 (XRecord for capture, XTest for simulation).
+It requires `libx11` and `libxtst` at runtime.
+
+For input listening and simulation on Wayland, opt in to the experimental evdev backend on Linux x64 (glibc):
+
+```js
+const { startListen, EventTypeJs } = require('monio-napi/evdev')
+
+const hook = startListen((event) => {
+  if (event.eventType === EventTypeJs.KeyPressed) console.log(event.keyboard?.key)
+})
+
+process.once('SIGINT', () => hook.stop())
+```
+
+The process needs read access to `/dev/input/event*` and write access to `/dev/uinput`.
+These are system input permissions. Grant them only to trusted users and processes.
+The evdev entry point provides `startListen()`, including its event mask and stop controls.
+Pointer coordinates for relative devices represent accumulated motion.
+
+```js
+const { simulateKeyTap, simulateMouseClick, simulateMouseMoveRelative, KeyJs, ButtonJs } = require('monio-napi/evdev')
+
+simulateKeyTap(KeyJs.KeyA)
+simulateMouseClick(ButtonJs.Left)
+simulateMouseMoveRelative(40, -10)
+```
+
+`simulateMouseMoveRelative()` takes signed 32-bit input counts. The desktop applies
+pointer acceleration and scaling. Absolute pointer movement and display queries
+are available through the default X11 entry point. Wayland simulation was verified
+on GNOME with a native GTK window. Validate other compositors separately.
+
+When building from source, run `pnpm build:evdev` to build the evdev addon.
 
 ## Development
 
